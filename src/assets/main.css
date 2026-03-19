@@ -1,0 +1,105 @@
+@import "tailwindcss";
+
+@theme {
+  /* Discord Background Colors */
+  --color-dc-bg-primary: #313338;
+  --color-dc-bg-secondary: #2b2d31;
+  --color-dc-bg-tertiary: #1e1f22;
+  --color-dc-bg-modifier-hover: #35373c;
+  --color-dc-bg-modifier-active: #3f4147;
+  --color-dc-bg-modifier-selected: #43444b;
+
+  /* Discord Brand */
+  --color-dc-brand: #5865f2;
+  --color-dc-brand-hover: #4752c4;
+
+  /* Discord Text Colors */
+  --color-dc-text-normal: #f2f3f5;
+  --color-dc-text-muted: #949ba4;
+  --color-dc-text-faint: #6d6f78;
+  --color-dc-text-link: #00a8fc;
+  --color-dc-text-positive: #23a559;
+  --color-dc-text-warning: #f0b232;
+  --color-dc-text-danger: #f23f43;
+
+  /* Discord Header/Channel Text */
+  --color-dc-channel-default: #80848e;
+  --color-dc-channel-hover: #dbdee1;
+  --color-dc-channel-active: #f2f3f5;
+
+  /* Discord Interactive */
+  --color-dc-interactive-normal: #b5bac1;
+  --color-dc-interactive-hover: #dbdee1;
+  --color-dc-interactive-active: #f2f3f5;
+
+  /* Discord Status Colors */
+  --color-dc-status-online: #23a559;
+  --color-dc-status-idle: #f0b232;
+  --color-dc-status-dnd: #f23f43;
+  --color-dc-status-offline: #80848e;
+
+  /* Discord Misc */
+  --color-dc-divider: #3f4147;
+  --color-dc-scrollbar-thumb: #1a1b1e;
+  --color-dc-scrollbar-track: #2b2d31;
+  --color-dc-input-bg: #383a40;
+  --color-dc-mention-bg: rgba(88, 101, 242, 0.3);
+  --color-dc-mention-hover-bg: rgba(88, 101, 242, 0.5);
+
+  /* Sizing */
+  --width-server-sidebar: 72px;
+  --width-channel-sidebar: 240px;
+}
+
+/* Global styles */
+* {
+  box-sizing: border-box;
+}
+
+html, body, #app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+body {
+  background-color: var(--color-dc-bg-primary);
+  color: var(--color-dc-text-normal);
+  font-family: 'gg sans', 'Noto Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.375;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Discord-style scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-dc-scrollbar-track);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-dc-scrollbar-thumb);
+  border-radius: 4px;
+  min-height: 40px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #222428;
+}
+
+/* Thin scrollbar for channel list */
+.thin-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+/* Selection color */
+::selection {
+  background-color: var(--color-dc-brand);
+  color: white;
+}

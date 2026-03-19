@@ -1,0 +1,10 @@
+export { default as Avatar } from './Avatar.vue'
+export { default as Tooltip } from './Tooltip.vue'
+export { default as IconButton } from './IconButton.vue'
+export { default as Divider } from './Divider.vue'
+export { default as Badge } from './Badge.vue'
+
+export type { AvatarProps } from './Avatar.vue'
+export type { TooltipProps } from './Tooltip.vue'
+export type { IconButtonProps } from './IconButton.vue'
+export type { BadgeProps } from './Badge.vue'
