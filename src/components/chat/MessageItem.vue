@@ -117,12 +117,45 @@ function handleReply() {
         </div>
 
         <!-- Message text -->
-        <div class="text-[15px] text-dc-text-normal leading-[1.375rem] break-words whitespace-pre-wrap">
+        <div v-if="message.content" class="text-[15px] text-dc-text-normal leading-[1.375rem] break-words whitespace-pre-wrap">
           <span v-if="questionStatusIcon" class="mr-1">{{ questionStatusIcon }}</span>
           {{ message.content }}
           <span v-if="message.score !== undefined" class="ml-2 text-xs text-yellow-400">
             (得分: {{ message.score }})
           </span>
+        </div>
+
+        <!-- Embed message (Discord风格) -->
+        <div
+          v-if="message.embed"
+          class="mt-1 max-w-md rounded overflow-hidden"
+          :style="{ borderLeft: `4px solid ${message.embed.color || '#5865f2'}` }"
+        >
+          <div class="bg-dc-bg-secondary p-3">
+            <!-- Embed title -->
+            <div v-if="message.embed.title" class="font-semibold text-dc-text-normal mb-2">
+              {{ message.embed.title }}
+            </div>
+            <!-- Embed description -->
+            <div v-if="message.embed.description" class="text-sm text-dc-text-muted mb-2">
+              {{ message.embed.description }}
+            </div>
+            <!-- Embed fields -->
+            <div v-if="message.embed.fields" class="grid gap-2" :class="message.embed.fields.some(f => f.inline) ? 'grid-cols-3' : 'grid-cols-1'">
+              <div
+                v-for="(field, idx) in message.embed.fields"
+                :key="idx"
+                :class="field.inline ? 'col-span-1' : 'col-span-3'"
+              >
+                <div class="text-xs text-dc-text-muted font-semibold">{{ field.name }}</div>
+                <div class="text-sm text-dc-text-normal">{{ field.value }}</div>
+              </div>
+            </div>
+            <!-- Embed footer -->
+            <div v-if="message.embed.footer" class="mt-2 text-xs text-dc-text-faint">
+              {{ message.embed.footer }}
+            </div>
+          </div>
         </div>
 
         <!-- Reactions -->

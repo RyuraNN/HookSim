@@ -30,6 +30,19 @@ export interface MessageReference {
   readonly content: string
 }
 
+export interface MessageEmbed {
+  readonly color?: string // hex color
+  readonly title?: string
+  readonly description?: string
+  readonly fields?: readonly {
+    readonly name: string
+    readonly value: string
+    readonly inline?: boolean
+  }[]
+  readonly footer?: string
+  readonly thumbnail?: string
+}
+
 export type MessageStatus = 'pending' | 'resolved' | 'needs_info' | 'volunteer_answered'
 
 export interface Message {
@@ -47,4 +60,5 @@ export interface Message {
   readonly questionStatus?: MessageStatus
   readonly wikiTopicId?: string
   readonly score?: number
+  readonly embed?: MessageEmbed
 }

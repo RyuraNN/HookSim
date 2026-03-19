@@ -410,8 +410,8 @@ export function useGameController() {
     messageStore.addMessage(message)
   }
 
-  // 添加第三方警告消息（Bot消息）
-  function addBotWarning(userName: string) {
+  // 添加第三方禁言处罚消息（Bot消息，embed风格）
+  function addBotWarning(userName: string, volunteerName?: string) {
     const botUser: User = {
       id: 'Odysseia-bot',
       username: 'Odysseia-Main',
@@ -421,17 +421,36 @@ export function useGameController() {
       isBot: true,
     }
 
-    const warningContent = `⚠️ **警告** ⚠️\n\n用户 **${userName}** 因使用不合规第三方API（淘宝/闲鱼等贩子渠道）而被打回重新答题。\n\n📋 **类脑社区规定：**\n- 禁止使用淘宝/闲鱼等平台购买的API\n- 禁止使用未经验证的"半公益站"\n- 这类渠道可能参水（用垃圾模型冒充先进模型）\n- 使用贩子API是对免费分享角色卡/预设作者的不尊重\n\n✅ **允许使用的渠道：**\n- Google AI Studio官方API\n- 硅基流动、OpenRouter、AWS等正规聚合商\n- 社区认可的公益站和反代`
+    // 生成随机处罚ID
+    const punishmentId = Math.random().toString(16).slice(2, 9)
+    // 随机禁言时长（1-7天）
+    const muteDays = Math.floor(Math.random() * 7) + 1
+    // 随机警告天数（7-30天）
+    const warnDays = Math.floor(Math.random() * 24) + 7
+    // 获取志愿者名字
+    const volunteer = volunteerName || '答疑志愿者'
 
     const message: Message = {
       id: `bot-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       channelId: activeChannelId.value,
       author: botUser,
-      content: warningContent,
+      content: '',
       timestamp: new Date(),
       attachments: [],
       reactions: [],
       pinned: false,
+      embed: {
+        color: '#ed4245', // Discord红色
+        title: '🚫 禁言处罚',
+        fields: [
+          { name: '时长', value: `${muteDays}天`, inline: true },
+          { name: '成员', value: `<@${userName}>`, inline: true },
+          { name: '答疑组成员', value: `@${volunteer}`, inline: true },
+          { name: '原因', value: '第三方api+冲水', inline: false },
+          { name: '警告', value: `${warnDays}天`, inline: false },
+        ],
+        footer: `处罚ID: ${punishmentId}`,
+      },
     }
 
     messageStore.addMessage(message)
