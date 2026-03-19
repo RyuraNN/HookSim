@@ -58,6 +58,13 @@ const questionStatusIcon = computed(() => {
 function handleReply() {
   emit('reply', props.message)
 }
+
+// 格式化消息内容，支持**加粗**语法
+function formatContent(content: string): string {
+  return content
+    .replace(/\*\*(.+?)\*\*/g, '<strong class="text-dc-brand">$1</strong>')
+    .replace(/\n/g, '<br>')
+}
 </script>
 
 <template>
@@ -116,16 +123,7 @@ function handleReply() {
           </time>
         </div>
 
-        <!-- Message text -->
-        <div v-if="message.content" class="text-[15px] text-dc-text-normal leading-[1.375rem] break-words whitespace-pre-wrap">
-          <span v-if="questionStatusIcon" class="mr-1">{{ questionStatusIcon }}</span>
-          {{ message.content }}
-          <span v-if="message.score !== undefined" class="ml-2 text-xs text-yellow-400">
-            (得分: {{ message.score }})
-          </span>
-        </div>
-
-        <!-- Embed message (Discord风格) -->
+        <!-- Embed message (Discord风格) - 放在正文前面 -->
         <div
           v-if="message.embed"
           class="mt-1 max-w-md rounded overflow-hidden"
@@ -141,11 +139,11 @@ function handleReply() {
               {{ message.embed.description }}
             </div>
             <!-- Embed fields -->
-            <div v-if="message.embed.fields" class="grid gap-2" :class="message.embed.fields.some(f => f.inline) ? 'grid-cols-3' : 'grid-cols-1'">
+            <div v-if="message.embed.fields" class="grid gap-2" :class="message.embed.fields.some(f => f.inline) ? 'grid-cols-2' : 'grid-cols-1'">
               <div
                 v-for="(field, idx) in message.embed.fields"
                 :key="idx"
-                :class="field.inline ? 'col-span-1' : 'col-span-3'"
+                :class="field.inline ? 'col-span-1' : 'col-span-2'"
               >
                 <div class="text-xs text-dc-text-muted font-semibold">{{ field.name }}</div>
                 <div class="text-sm text-dc-text-normal">{{ field.value }}</div>
@@ -156,6 +154,17 @@ function handleReply() {
               {{ message.embed.footer }}
             </div>
           </div>
+        </div>
+
+        <!-- Message text -->
+        <div v-if="message.content && message.embed" class="text-[15px] text-dc-text-normal leading-[1.375rem] break-words whitespace-pre-wrap mt-2" v-html="formatContent(message.content)">
+        </div>
+        <div v-else-if="message.content" class="text-[15px] text-dc-text-normal leading-[1.375rem] break-words whitespace-pre-wrap">
+          <span v-if="questionStatusIcon" class="mr-1">{{ questionStatusIcon }}</span>
+          {{ message.content }}
+          <span v-if="message.score !== undefined" class="ml-2 text-xs text-yellow-400">
+            (得分: {{ message.score }})
+          </span>
         </div>
 
         <!-- Reactions -->

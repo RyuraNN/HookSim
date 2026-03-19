@@ -410,7 +410,7 @@ export function useGameController() {
     messageStore.addMessage(message)
   }
 
-  // 添加第三方禁言处罚消息（Bot消息，embed风格）
+  // 添加第三方快速处罚消息（Bot消息，embed风格）
   function addBotWarning(userName: string, volunteerName?: string) {
     const botUser: User = {
       id: 'Odysseia-bot',
@@ -421,35 +421,30 @@ export function useGameController() {
       isBot: true,
     }
 
-    // 生成随机处罚ID
-    const punishmentId = Math.random().toString(16).slice(2, 9)
-    // 随机禁言时长（1-7天）
-    const muteDays = Math.floor(Math.random() * 7) + 1
-    // 随机警告天数（7-30天）
-    const warnDays = Math.floor(Math.random() * 24) + 7
-    // 获取志愿者名字
-    const volunteer = volunteerName || '答疑志愿者'
+    // 获取执行者名字
+    const executor = volunteerName || '答疑志愿者'
+    // 当前时间
+    const now = new Date()
+    const timeStr = `今天${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
 
     const message: Message = {
       id: `bot-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       channelId: activeChannelId.value,
       author: botUser,
-      content: '',
+      content: `该成员因违反社区规则，被要求**重新答题**，处罚说明及教程已私信。\n望各位支持**合规渠道**，避免**隐私风险与安全隐患**，共同维护**反商业化的社区共识**。`,
       timestamp: new Date(),
       attachments: [],
       reactions: [],
       pinned: false,
       embed: {
-        color: '#ed4245', // Discord红色
-        title: '🚫 禁言处罚',
+        color: '#fee75c', // 黄色警告
+        title: '⚠ 快速处罚',
         fields: [
-          { name: '时长', value: `${muteDays}天`, inline: true },
-          { name: '成员', value: `<@${userName}>`, inline: true },
-          { name: '答疑组成员', value: `@${volunteer}`, inline: true },
-          { name: '原因', value: '第三方api+冲水', inline: false },
-          { name: '警告', value: `${warnDays}天`, inline: false },
+          { name: '处罚对象', value: `@${userName}`, inline: true },
+          { name: '执行者', value: `@${executor}`, inline: true },
+          { name: '原因', value: '违规第三方', inline: false },
         ],
-        footer: `处罚ID: ${punishmentId}`,
+        footer: timeStr,
       },
     }
 
